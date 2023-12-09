@@ -87,7 +87,7 @@ class AuthService {
     String emailId = 'geethuajay@gmail.com';
     String password = 'wjhptgnuhqbfqsyi';
     final smtpServer = gmail(emailId, password);
-
+     // sending otp in email
     final message = Message()
       ..from = Address(emailId)
       ..recipients.add(email) // Recipient's email address
