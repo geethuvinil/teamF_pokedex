@@ -8,6 +8,7 @@ import 'package:app/shared/ui/widgets/app_bar.dart';
 import 'package:app/shared/ui/widgets/drawer_menu/drawer_menu.dart';
 import 'package:app/shared/utils/app_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
@@ -120,41 +121,55 @@ print('92828252545${widget.userEmailid}');
           endDrawer: const Drawer(
             child: DrawerMenuWidget(),
           ),
-          body: Stack(children: [
-            SafeArea(
-              bottom: false,
-              child: CustomScrollView(
-                slivers: [
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    sliver: Observer(
-                      builder: (_) => AppBarWidget(
-                        title: _homeStore.page.description,
-                        lottiePath: AppConstants.squirtleLottie,
-                        userEmail: widget.userEmailid,
+          body: WillPopScope(
+            onWillPop: showExitPopUp,
+            child: Stack(children: [
+              SafeArea(
+                bottom: false,
+                child: CustomScrollView(
+                  slivers: [
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
+                      sliver: Observer(
+                        builder: (_) => AppBarWidget(
+                          title: _homeStore.page.description,
+                          lottiePath: AppConstants.squirtleLottie,
+                          userEmail: widget.userEmailid,
+                        ),
                       ),
                     ),
-                  ),
-                  Observer(
-                    builder: (_) {
-                      switch (_homeStore.page) {
-                        case HomePageType.POKEMON_GRID:
-                          return PokemonGridPage();
-                        case HomePageType.ITENS:
-                          return ItemsPage();
-                        default:
-                          return PokemonGridPage();
-                      }
-                    },
-                  ),
-                ],
+                    Observer(
+                      builder: (_) {
+                        switch (_homeStore.page) {
+                          case HomePageType.POKEMON_GRID:
+                            return PokemonGridPage();
+                          case HomePageType.ITENS:
+                            return ItemsPage();
+                          default:
+                            return PokemonGridPage();
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ]),
+            ]),
+          ),
         );
       }),
     );
+  }
+  Future<bool>showExitPopUp()async{
+return await showDialog(context: context, builder: (context) => AlertDialog(
+title: Text('Do you really want to exit from Pokedex app?'),
+actions: [
+  TextButton(onPressed: (){}, child: Text('No')),
+  TextButton(onPressed: (){
+    SystemNavigator.pop();
+  }, child: Text('Yes'))
+],
+),);
   }
 }
