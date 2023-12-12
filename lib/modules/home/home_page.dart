@@ -2,23 +2,30 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:app/modules/home/home_page_store.dart';
 import 'package:app/modules/items/items_page.dart';
 import 'package:app/modules/pokemon_grid/pokemon_grid_page.dart';
+import 'package:app/modules/profile_details/bloc/profile_details_bloc.dart';
+import 'package:app/modules/profile_details/profile_details_page.dart';
 import 'package:app/shared/stores/item_store/item_store.dart';
 import 'package:app/shared/stores/pokemon_store/pokemon_store.dart';
+import 'package:app/shared/ui/enums/device_screen_type.dart';
+import 'package:app/shared/ui/widgets/animated_pokeball.dart';
 import 'package:app/shared/ui/widgets/app_bar.dart';
 import 'package:app/shared/ui/widgets/drawer_menu/drawer_menu.dart';
 import 'package:app/shared/utils/app_constants.dart';
+import 'package:app/theme/app_theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mobx/mobx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class HomePage extends StatefulWidget {
   final String? userEmailid;
-  HomePage({Key? key, this.userEmailid}): super(key: key);
-
+  HomePage({Key? key, this.userEmailid}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -39,11 +46,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late PanelController _panelController;
 
   late List<ReactionDisposer> reactionDisposer = [];
+  ProfileDetailsBloc _profileDetailsBloc = ProfileDetailsBloc();
 
   @override
   void initState() {
     super.initState();
-print('92828252545${widget.userEmailid}');
+    print('92828252545${widget.userEmailid}');
     _pokemonStore = GetIt.instance<PokemonStore>();
     _itemStore = GetIt.instance<ItemStore>();
     _homeStore = GetIt.instance<HomePageStore>();
@@ -113,63 +121,181 @@ print('92828252545${widget.userEmailid}');
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return ThemeSwitchingArea(
       child: Builder(builder: (context) {
-        return Scaffold(
-          key: const Key('home_page'),
-          backgroundColor: Theme.of(context).colorScheme.background,
-          endDrawer: const Drawer(
-            child: DrawerMenuWidget(),
-          ),
-          body: WillPopScope(
-            onWillPop: showExitPopUp,
-            child: Stack(children: [
-              SafeArea(
-                bottom: false,
-                child: CustomScrollView(
-                  slivers: [
-                    SliverPadding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                      ),
-                      sliver: Observer(
-                        builder: (_) => AppBarWidget(
-                          title: _homeStore.page.description,
-                          lottiePath: AppConstants.squirtleLottie,
-                          userEmail: widget.userEmailid,
-                        ),
-                      ),
-                    ),
-                    Observer(
-                      builder: (_) {
-                        switch (_homeStore.page) {
-                          case HomePageType.POKEMON_GRID:
-                            return PokemonGridPage();
-                          case HomePageType.ITENS:
-                            return ItemsPage();
-                          default:
-                            return PokemonGridPage();
-                        }
-                      },
-                    ),
-                  ],
+        print('welcomezllLaz');
+        return BlocProvider(
+          create: (context) => _profileDetailsBloc,
+          child: BlocConsumer<ProfileDetailsBloc, ProfileDetailsState>(
+            listener: (context, state) {
+               print('state is  $state');
+                // if (state is FetchedProfileDetailsSuccessfully) {
+                //   Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) =>
+                //             ProfileDetailsPage(emailId: state.userEmail),
+                //       ));
+                // }
+                // if (state is FetchedProfileDetailsFailed) {
+                //   AlertDialog(
+                //     title: Text('No user found'),
+                //   );
+                // }
+            },
+            builder: (context, state) {
+              return Scaffold(
+                key: const Key('home_page'),
+                backgroundColor: Theme.of(context).colorScheme.background,
+                endDrawer: const Drawer(
+                  child: DrawerMenuWidget(),
                 ),
-              ),
-            ]),
+                body: WillPopScope(
+                  onWillPop: showExitPopUp,
+                  child: Stack(children: [
+                    SafeArea(
+                      bottom: false,
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverPadding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                            ),
+                            sliver: Observer(
+                              builder: (_) => AppBarWidget(
+                                title: _homeStore.page.description,
+                                lottiePath: AppConstants.squirtleLottie,
+                                userEmail: widget.userEmailid,
+                              ),
+                              // builder: (_) => SliverAppBar(
+                              //   pinned: true,
+                              //   snap: false,
+                              //   floating: false,
+                              //   expandedHeight: 170.0,
+                              //   collapsedHeight: 70,
+                              //   elevation: 0,
+                              //   backgroundColor:
+                              //       Theme.of(context).backgroundColor,
+                              //   actions: [
+                              //     Padding(
+                              //       padding: EdgeInsets.only(top: 20),
+                              //       child: IconButton(
+                              //         onPressed: () {
+                              //           Scaffold.of(context).openEndDrawer();
+                              //         },
+                              //         icon: Icon(Icons.menu,
+                              //             color: AppTheme.getColors(context)
+                              //                 .appBarButtons),
+                              //       ),
+                              //     ),
+                              //     Padding(
+                              //       padding: EdgeInsets.only(top: 20, left: 5),
+                              //       child: BlocBuilder<ProfileDetailsBloc,
+                              //           ProfileDetailsState>(
+                              //         builder: (context, state) {
+                              //           return IconButton(
+                              //               onPressed: () {
+                              //                  print('pressed');
+                              //                 context
+                              //                     .read<ProfileDetailsBloc>()
+                              //                     .add(UserProfileDetails(
+                              //                         userEmailId:
+                              //                             'unni@gmail.com'));
+                              //               },
+                              //               icon: Icon(
+                              //                 Icons.person,
+                              //                 color: Colors.black,
+                              //               ));
+                              //         },
+                              //       ),
+                              //     )
+                              //   ],
+                              //   flexibleSpace: Stack(children: [
+                              //     FlexibleSpaceBar(
+                              //       centerTitle: false,
+                              //       background: AppConstants.squirtleLottie !=
+                              //               null
+                              //           ? Align(
+                              //               alignment: Alignment.bottomRight,
+                              //               child: Lottie.asset(
+                              //                   AppConstants.squirtleLottie,
+                              //                   height: 140.0),
+                              //             )
+                              //           : Container(),
+                              //       titlePadding:
+                              //           EdgeInsets.only(left: 15, bottom: 10),
+                              //       title: Row(
+                              //         children: [
+                              //           AnimatedPokeballWidget(
+                              //             size: 24,
+                              //             color: AppTheme.getColors(context)
+                              //                 .pokeballLogoBlack,
+                              //           ),
+                              //           SizedBox(
+                              //             width: 5,
+                              //           ),
+                              //           Text(_homeStore.page.description,
+                              //               style: textTheme.headline1),
+                              //           if (kIsWeb &&
+                              //               getDeviceScreenType(context) !=
+                              //                   DeviceScreenType.CELLPHONE)
+                              //             SizedBox(
+                              //               width: 5,
+                              //             ),
+                              //           if (kIsWeb &&
+                              //               getDeviceScreenType(context) !=
+                              //                   DeviceScreenType.CELLPHONE)
+                              //             Image.network(
+                              //               AppConstants.getRandomPokemonGif(),
+                              //               height: 32,
+                              //             )
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ]),
+                              // ),
+                            ),
+                          ),
+                          Observer(
+                            builder: (_) {
+                              switch (_homeStore.page) {
+                                case HomePageType.POKEMON_GRID:
+                                  return PokemonGridPage();
+                                case HomePageType.ITENS:
+                                  return ItemsPage();
+                                default:
+                                  return PokemonGridPage();
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]),
+                ),
+              );
+            },
           ),
         );
       }),
     );
   }
-  Future<bool>showExitPopUp()async{
-return await showDialog(context: context, builder: (context) => AlertDialog(
-title: Text('Do you really want to exit from Pokedex app?'),
-actions: [
-  TextButton(onPressed: (){}, child: Text('No')),
-  TextButton(onPressed: (){
-    SystemNavigator.pop();
-  }, child: Text('Yes'))
-],
-),);
+
+  Future<bool> showExitPopUp() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Do you really want to exit from Pokedex app?'),
+        actions: [
+          TextButton(onPressed: () {}, child: Text('No')),
+          TextButton(
+              onPressed: () {
+                SystemNavigator.pop();
+              },
+              child: Text('Yes'))
+        ],
+      ),
+    );
   }
 }

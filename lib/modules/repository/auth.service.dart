@@ -9,7 +9,7 @@ class AuthService {
   Future<dynamic> registerUser(dynamic userData) async {
     try {
       dynamic response = await http.post(
-          Uri.parse('http://192.168.0.102:3000/signup'),
+          Uri.parse('$baseUrl/signup'),
           headers: {'Content-Type': 'application/json'},
           // since the type of data we are passing is json, we will give the content type as json
           body: json.encode(userData));
@@ -120,11 +120,12 @@ class AuthService {
   }
   Future<dynamic> fetchUserDetails(String userEmailId) async{
     try {
-      dynamic response = await http.get(Uri.parse('$baseUrl/fetch-profile_details?email=$userEmailId'),
+      dynamic response = await http.get(Uri.parse('$baseUrl/user/profile?email=$userEmailId'),
        headers: {'Content-Type': 'application/json'},
        
        );
        dynamic responseObj = json.decode(response.body);
+       print('717174,$responseObj');
       return responseObj;
     } catch (e) {
      print('$e');  

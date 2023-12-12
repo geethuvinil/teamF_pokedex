@@ -9,12 +9,12 @@ final class FetchedProfileDetailsSuccessfully extends ProfileDetailsState {
   final String userName;
    final String userEmail;
     final String userMobile;
-     final String userPassword;
+     
 
-  FetchedProfileDetailsSuccessfully({required this.userEmail,
-  required this.userName,
+  FetchedProfileDetailsSuccessfully({required this.userName,
+  required this.userEmail,
   required this.userMobile,
-  required this.userPassword
+
   });
 
 }

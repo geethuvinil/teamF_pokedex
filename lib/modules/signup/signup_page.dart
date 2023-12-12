@@ -18,7 +18,7 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController _userRePasswordController = TextEditingController();
 
   SignupBloc _signupBloc = SignupBloc();
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
