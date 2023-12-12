@@ -159,6 +159,10 @@ class _OtpPageState extends State<OtpPage> {
                             style: TextStyle(fontSize: 17),
                             textFieldAlignment: MainAxisAlignment.spaceAround,
                             fieldStyle: FieldStyle.box,
+                            otpFieldStyle: OtpFieldStyle(
+focusBorderColor: Colors.black,
+
+                            ),
                           )
                         ],
                       ),

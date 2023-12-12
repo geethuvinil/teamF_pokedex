@@ -1,3 +1,4 @@
+import 'package:app/common_widgets/common_textformfield.dart';
 import 'package:app/modules/login/login_page.dart';
 import 'package:app/modules/reset_password/bloc/reset_password_bloc.dart';
 import 'package:flutter/material.dart';
@@ -57,50 +58,49 @@ class _RsestPasswordPageState extends State<RsestPasswordPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 12),
-                    child: TextFormField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        labelText: 'Email id',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(
-                          Icons.email,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                    child: CommonTextFormFieldWidget(
+                                    controller: _emailController,
+                                    labelString: 'Email Id',
+                                    prefixIconWidget: Icon(
+                                      Icons.email,
+                                      color: Colors.black,
+                                    ))
+                    
+                    
+                    
+             
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 12),
-                    child: TextFormField(
-                      controller: _newPasswordController,
+                    child: CommonTextFormFieldWidget(
                       obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'New Password',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(
-                          Icons.password,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                      maxLines: 1,
+                                    controller: _newPasswordController,
+                                    labelString: 'New Password',
+                                    prefixIconWidget: Icon(
+                                      Icons.lock,
+                                      color: Colors.black,
+                                    ))
+                    
+                    
+                    
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 12),
-                    child: TextFormField(
-                      controller: _confirmPasswordController,
+                    child:  CommonTextFormFieldWidget(
                       obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: 'Confirm New Password',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(
-                          Icons.confirmation_number,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
+                      maxLines: 1,
+                                    controller: _confirmPasswordController,
+                                    labelString: 'Confirm New Password',
+                                    prefixIconWidget: Icon(
+                                      Icons.confirmation_number,
+                                      color: Colors.black,
+                                    ))
+                    
+                    
+                 
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(

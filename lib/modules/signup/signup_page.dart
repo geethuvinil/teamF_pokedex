@@ -1,3 +1,4 @@
+import 'package:app/common_widgets/common_textformfield.dart';
 import 'package:app/modules/home/home_page.dart';
 import 'package:app/modules/signup/bloc/bloc/signup_bloc.dart';
 import 'package:flutter/material.dart';
@@ -112,78 +113,72 @@ class _SignupPageState extends State<SignupPage> {
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 17),
-                                  child: TextFormField(
+                                  child:  CommonTextFormFieldWidget(
                                     controller: _userNameController,
-                                    keyboardType: TextInputType.name,
-                                    decoration: InputDecoration(
-                                      labelText: 'Name',
-                                      border: OutlineInputBorder(),
-                                      prefixIcon: Icon(
-                                        Icons.person,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                    labelString: 'Name',
+                                    prefixIconWidget: Icon(
+                                      Icons.person,
+                                      color: Colors.black,
+                                    ))),
+                                  
+                                  
+                                  
+                                
+                                
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 17),
-                                  child: TextFormField(
+                                  child:  CommonTextFormFieldWidget(
                                     controller: _userEmailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: InputDecoration(
-                                      labelText: 'Email',
-                                      border: OutlineInputBorder(),
-                                      prefixIcon: Icon(
-                                        Icons.email,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
+                                    labelString: 'Email',
+                                    prefixIconWidget: Icon(
+                                      Icons.email,
+                                      color: Colors.black,
+                                    ))
+                                  
+                                 
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 17),
-                                  child: TextFormField(
+                                  child:  CommonTextFormFieldWidget(
                                     controller: _userMobileController,
-                                    keyboardType: TextInputType.phone,
-                                    decoration: InputDecoration(
-                                      labelText: 'Phone Number',
-                                      border: OutlineInputBorder(),
-                                      prefixIcon: Icon(
-                                        Icons.phone,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
+                                    labelString: 'Phone Number',
+                                    prefixIconWidget: Icon(
+                                      Icons.phone,
+                                      color: Colors.black,
+                                    ))
+                                  
+                                  
+                                  
+                                 
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 17),
-                                  child: TextFormField(
+                                  child: CommonTextFormFieldWidget(
                                     controller: _userPasswordController,
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                      labelText: 'Password',
-                                      border: OutlineInputBorder(),
-                                      prefixIcon: Icon(
-                                        Icons.lock,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
+                                    labelString: 'Password',
+                                    prefixIconWidget: Icon(
+                                      Icons.lock,
+                                      color: Colors.black,
+                                    )) 
+                                  
+                                  
+                                  
+                                  
+                                  
+                                 
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 17),
-                                  child: TextFormField(
+                                  child:  CommonTextFormFieldWidget(
                                     controller: _userRePasswordController,
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                      labelText: 'Confirm Password',
-                                      border: OutlineInputBorder(),
-                                      prefixIcon: Icon(
-                                        Icons.lock,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
+                                    labelString: 'Confirm Password',
+                                    prefixIconWidget: Icon(
+                                      Icons.lock,
+                                      color: Colors.black,
+                                    ))
+                                  
+                                  
+                            
                                 ),
                               ],
                             ),

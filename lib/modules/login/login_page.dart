@@ -1,3 +1,4 @@
+import 'package:app/common_widgets/common_textformfield.dart';
 import 'package:app/modules/forgot_password/forgot_password.dart';
 import 'package:app/modules/home/home_page.dart';
 import 'package:app/modules/login/bloc/bloc/login_bloc.dart';
@@ -24,18 +25,23 @@ class _LoginPageState extends State<LoginPage> {
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginSuccess) {
-               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Login success.'),backgroundColor: Colors.green,));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Login success.'),
+                backgroundColor: Colors.green,
+              ));
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomePage(userEmailid: _emailController.text),
+                  builder: (context) =>
+                      HomePage(userEmailid: _emailController.text),
                 ),
               );
             }
             if (state is LoginFailed) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Login failed. Please try again later.'),backgroundColor: Colors.red,));
+                content: Text('Login failed. Please try again later.'),
+                backgroundColor: Colors.red,
+              ));
             }
           },
           builder: (context, state) {
@@ -101,35 +107,25 @@ class _LoginPageState extends State<LoginPage> {
                               height: 20,
                             ),
                             Padding(
-                              padding: EdgeInsets.only(bottom: 17),
-                              child: TextFormField(
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: InputDecoration(
-                                  labelText: 'Email',
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(
+                                padding: EdgeInsets.only(bottom: 17),
+                                child: CommonTextFormFieldWidget(
+                                  controller: _emailController,
+                                  labelString: 'Email',
+                                  inputType: TextInputType.emailAddress,
+                                  prefixIconWidget: Icon(
                                     Icons.email,
                                     color: Colors.black,
                                   ),
-                                ),
-                              ),
-                            ),
+                                )),
                             Padding(
-                              padding: EdgeInsets.only(bottom: 17),
-                              child: TextFormField(
-                                controller: _passwordController,
-                               obscureText: true,
-                                decoration: InputDecoration(
-                                  labelText: 'Password',
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(
-                                    Icons.lock,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
+                                padding: EdgeInsets.only(bottom: 17),
+                                child: CommonTextFormFieldWidget(
+                                    controller: _passwordController,
+                                    labelString: 'Password',
+                                    prefixIconWidget: Icon(
+                                      Icons.lock,
+                                      color: Colors.black,
+                                    ))),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [

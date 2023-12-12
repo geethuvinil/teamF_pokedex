@@ -1,3 +1,4 @@
+import 'package:app/common_widgets/common_textformfield.dart';
 import 'package:app/modules/emailOtp/emailOtp_page.dart';
 import 'package:app/modules/forgot_password/bloc/bloc/forgot_password_bloc.dart';
 import 'package:flutter/material.dart';
@@ -92,18 +93,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 15, vertical: 25),
-                      child: TextFormField(
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          border: OutlineInputBorder(),
-                          prefixIcon: Icon(
-                            Icons.person,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
+                      child:  CommonTextFormFieldWidget(
+                                    controller: _emailController,
+                                    labelString: 'Email',
+                                    prefixIconWidget: Icon(
+                                      Icons.email,
+                                      color: Colors.black,
+                                    ))
+                      
+                      
+                      
+                   
+                      
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
