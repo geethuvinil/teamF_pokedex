@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:app/modules/login/login_page.dart';
+import 'package:app/shared/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
@@ -42,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
         child: Center(
           child: Lottie.asset(
-            "assets/lottie/pika.json",
+           AppConstants.squirtleLottie,
             width: 250,
             height: 230,
           ),
