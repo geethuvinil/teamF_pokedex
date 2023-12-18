@@ -5,6 +5,7 @@ import 'package:app/modules/login/bloc/bloc/login_bloc.dart';
 import 'package:app/modules/signup/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quickalert/quickalert.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -25,23 +26,45 @@ class _LoginPageState extends State<LoginPage> {
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Login success.'),
-                backgroundColor: Colors.green,
-              ));
-              Navigator.push(
+                print('qiockalerrtttt');
+              QuickAlert.show(context: context, type: QuickAlertType.success,
+              text: 'Logged in successfully',
+             
+
+              confirmBtnText: 'Continue',
+              onConfirmBtnTap: () {
+                Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
                       HomePage(userEmailid: _emailController.text),
                 ),
               );
+              },
+
+              );
+              // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              //   content: Text('Login success.'),
+              //   backgroundColor: Colors.green,
+              // ));
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) =>
+              //         HomePage(userEmailid: _emailController.text),
+              //   ),
+              // );
             }
             if (state is LoginFailed) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Login failed. Please try again later.'),
-                backgroundColor: Colors.red,
-              ));
+            
+              QuickAlert.show(context: context, type: QuickAlertType.error,
+              text: 'Login failed due to incorrect email or password',
+              autoCloseDuration: Duration(seconds: 3),
+              showConfirmBtn:false);
+              // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              //   content: Text('Login failed. Please try again later.'),
+              //   backgroundColor: Colors.red,
+              // ));
             }
           },
           builder: (context, state) {
@@ -120,6 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                             Padding(
                                 padding: EdgeInsets.only(bottom: 17),
                                 child: CommonTextFormFieldWidget(
+                                  obscureText: true,
+                                  maxLines: 1,
                                     controller: _passwordController,
                                     labelString: 'Password',
                                     prefixIconWidget: Icon(
@@ -253,16 +278,22 @@ class _LoginPageState extends State<LoginPage> {
       String loginEmail, String loginPassword, BuildContext context) {
     print('jdnjddn$loginEmail');
     if (loginEmail.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Please enter an email')));
+      QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Please enter your email',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text('Please enter an email')));
     } else if (loginPassword.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Please enter a password')));
+         QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Please enter your password',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text('Please enter a password')));
     }
-    if (loginEmail.isEmpty && loginPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please enter your email and password.')));
-    } else {
+ 
+     else {
       context
           .read<LoginBloc>()
           .add(UserLogin(loginEmail: loginEmail, loginPassword: loginPassword));

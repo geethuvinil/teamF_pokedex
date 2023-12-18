@@ -18,7 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if(response['statusCode'] == 201){
           emit(LoginSuccess());
         }
-        if(response['statusCode'] == 404){
+        if(response['statusCode'] == 405){
           emit(LoginFailed());
         }
       } catch (e) {

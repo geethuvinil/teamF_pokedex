@@ -3,6 +3,7 @@ import 'package:app/modules/home/home_page.dart';
 import 'package:app/modules/signup/bloc/bloc/signup_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController _userRePasswordController = TextEditingController();
 
   SignupBloc _signupBloc = SignupBloc();
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,23 +29,29 @@ class _SignupPageState extends State<SignupPage> {
         child: BlocConsumer<SignupBloc, SignupState>(
           listener: (context, state) {
             if (state is SignupSuccess) {
-               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Sign up successfull.'),
-                  backgroundColor: Colors.green,));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('Sign up successfull.'),
+                backgroundColor: Colors.green,
+              ));
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage(userEmailid: _userEmailController.text,)),
+                MaterialPageRoute(
+                    builder: (context) => HomePage(
+                          userEmailid: _userEmailController.text,
+                        )),
               );
             }
             if (state is EmailExisting) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('This email already exist.'),
-                  backgroundColor: Colors.orange,));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('This email already exist.'),
+                backgroundColor: Colors.orange,
+              ));
             }
             if (state is SignupFailed) {
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Signup failed. Please try again later'),
-                  backgroundColor: Colors.red,));
+                content: Text('Signup failed. Please try again later'),
+                backgroundColor: Colors.red,
+              ));
             }
           },
           builder: (context, state) {
@@ -106,80 +113,75 @@ class _SignupPageState extends State<SignupPage> {
                         padding: EdgeInsets.all(30),
                         child: Column(
                           children: [
-                            SizedBox(
-                              height: 20,
-                            ),
                             Column(
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(bottom: 17),
-                                  child:  CommonTextFormFieldWidget(
-                                    controller: _userNameController,
-                                    labelString: 'Name',
-                                    prefixIconWidget: Icon(
-                                      Icons.person,
-                                      color: Colors.black,
-                                    ))),
-                                  
-                                  
-                                  
-                                
-                                
+                                    padding: EdgeInsets.only(bottom: 17),
+                                    child: CommonTextFormFieldWidget(
+                                        controller: _userNameController,
+                                        labelString: 'Name',
+                                        prefixIconWidget: Icon(
+                                          Icons.person,
+                                          color: Colors.black,
+                                        ))),
+
+                                Padding(
+                                    padding: EdgeInsets.only(bottom: 17),
+                                    child: CommonTextFormFieldWidget(
+                                        controller: _userEmailController,
+                                        labelString: 'Email',
+                                        prefixIconWidget: Icon(
+                                          Icons.email,
+                                          color: Colors.black,
+                                        ))),
+
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 17),
-                                  child:  CommonTextFormFieldWidget(
-                                    controller: _userEmailController,
-                                    labelString: 'Email',
-                                    prefixIconWidget: Icon(
-                                      Icons.email,
-                                      color: Colors.black,
-                                    ))
-                                  
-                                 
+                                  child: IntlPhoneField(
+                                    keyboardType: TextInputType.phone,
+                                    decoration: InputDecoration(
+                                      labelText: 'Phone Number',
+                                      border: OutlineInputBorder(),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.black),
+                                      ),
+                                      prefixIcon: Icon(
+                                        Icons.phone,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
                                 ),
+
+                                // Padding(
+                                //   padding: EdgeInsets.only(bottom: 17),
+                                //   child:  CommonTextFormFieldWidget(
+                                //     controller: _userMobileController,
+                                //     labelString: 'Phone Number',
+                                //     prefixIconWidget: Icon(
+                                //       Icons.phone,
+                                //       color: Colors.black,
+                                //     ))
+                                // ),
                                 Padding(
-                                  padding: EdgeInsets.only(bottom: 17),
-                                  child:  CommonTextFormFieldWidget(
-                                    controller: _userMobileController,
-                                    labelString: 'Phone Number',
-                                    prefixIconWidget: Icon(
-                                      Icons.phone,
-                                      color: Colors.black,
-                                    ))
-                                  
-                                  
-                                  
-                                 
-                                ),
+                                    padding: const EdgeInsets.only(bottom: 17),
+                                    child: CommonTextFormFieldWidget(
+                                        controller: _userPasswordController,
+                                        labelString: 'Password',
+                                        prefixIconWidget: Icon(
+                                          Icons.lock,
+                                          color: Colors.black,
+                                        ))),
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 17),
-                                  child: CommonTextFormFieldWidget(
-                                    controller: _userPasswordController,
-                                    labelString: 'Password',
-                                    prefixIconWidget: Icon(
-                                      Icons.lock,
-                                      color: Colors.black,
-                                    )) 
-                                  
-                                  
-                                  
-                                  
-                                  
-                                 
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 17),
-                                  child:  CommonTextFormFieldWidget(
-                                    controller: _userRePasswordController,
-                                    labelString: 'Confirm Password',
-                                    prefixIconWidget: Icon(
-                                      Icons.lock,
-                                      color: Colors.black,
-                                    ))
-                                  
-                                  
-                            
-                                ),
+                                    padding: const EdgeInsets.only(bottom: 17),
+                                    child: CommonTextFormFieldWidget(
+                                        controller: _userRePasswordController,
+                                        labelString: 'Confirm Password',
+                                        prefixIconWidget: Icon(
+                                          Icons.lock,
+                                          color: Colors.black,
+                                        ))),
                               ],
                             ),
                             Padding(
@@ -196,14 +198,12 @@ class _SignupPageState extends State<SignupPage> {
                                       return ElevatedButton(
                                         onPressed: () {
                                           validateUserDetails(
-                                             _userNameController.text,
-                                             _userEmailController.text,
-                                             _userMobileController.text,
-                                             _userPasswordController.text,
-                                          _userRePasswordController.text,
-                                          context
-                                          );
-                                          
+                                              _userNameController.text,
+                                              _userEmailController.text,
+                                              _userMobileController.text,
+                                              _userPasswordController.text,
+                                              _userRePasswordController.text,
+                                              context);
                                         },
                                         style: ButtonStyle(
                                           foregroundColor:
@@ -233,7 +233,8 @@ class _SignupPageState extends State<SignupPage> {
                                           }),
                                         ),
                                         child: Padding(
-                                          padding: const EdgeInsets.all(14.0),
+                                          padding: const EdgeInsets.only(
+                                              left: 14, top: 8, right: 14),
                                           child: Text(
                                             'SignUp',
                                             style: TextStyle(fontSize: 16),
@@ -245,7 +246,7 @@ class _SignupPageState extends State<SignupPage> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 10),
+                           
                             Image.asset(
                               "assets/images/poke.png",
                               height: 200,
@@ -265,41 +266,33 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
   }
-  validateUserDetails(String userName,String userEmail,String userMobile,String userPassword,
-  String userRePassword,BuildContext context){
 
-     if(userName.isEmpty){
-                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Please enter a username')));
-                                        }
-                                        else if(userMobile.isEmpty){
-                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Please enter a 10 digit mobile number')));
-                                        }
-                                       else if(userEmail.isEmpty){
-                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Please enter an email address')));
-                                        }
-                                        else if(userPassword.isEmpty){
-                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Please enter a password')));
-                                        }
-                                          else if(userRePassword.isEmpty){
-                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Please re enter the password')));
-                                        }
-                                        else if((userPassword)!= (userRePassword)){
-                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('Both passwords are not same')));
-                                        }
-                                        else{
- context.read<SignupBloc>().add(
-                                              SignupUser(
-                                                userName: userName,
-                                                userMobile: userMobile,
-                                                userEmail: userEmail,
-                                                userPassword: userPassword)
-                                            );
-                                        }
+  validateUserDetails(String userName, String userEmail, String userMobile,
+      String userPassword, String userRePassword, BuildContext context) {
+    if (userName.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Please enter a username')));
+    } else if (userMobile.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please enter a 10 digit mobile number')));
+    } else if (userEmail.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please enter an email address')));
+    } else if (userPassword.isEmpty) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Please enter a password')));
+    } else if (userRePassword.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please re enter the password')));
+    } else if ((userPassword) != (userRePassword)) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Both passwords are not same')));
+    } else {
+      context.read<SignupBloc>().add(SignupUser(
+          userName: userName,
+          userMobile: userMobile,
+          userEmail: userEmail,
+          userPassword: userPassword));
+    }
   }
 }
