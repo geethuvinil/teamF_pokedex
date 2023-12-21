@@ -4,6 +4,8 @@ import 'package:app/modules/signup/bloc/bloc/signup_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -29,29 +31,41 @@ class _SignupPageState extends State<SignupPage> {
         child: BlocConsumer<SignupBloc, SignupState>(
           listener: (context, state) {
             if (state is SignupSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Sign up successfull.'),
-                backgroundColor: Colors.green,
-              ));
-              Navigator.push(
+              QuickAlert.show(context: context, type: QuickAlertType.success,
+              text: 'Signup completed successfully',
+             
+
+              confirmBtnText: 'Continue',
+              onConfirmBtnTap: () {
+                Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => HomePage(
-                          userEmailid: _userEmailController.text,
-                        )),
+                  builder: (context) =>
+                      HomePage(userEmailid: _userEmailController.text),
+                ),
               );
+              },
+
+              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //       builder: (context) => HomePage(
+              //             userEmailid: _userEmailController.text,
+              //           )),
+              // );
             }
             if (state is EmailExisting) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('This email already exist.'),
-                backgroundColor: Colors.orange,
-              ));
+              QuickAlert.show(context: context, type: QuickAlertType.error,
+              text: 'This email already exist.',
+              autoCloseDuration: Duration(seconds: 3),
+              showConfirmBtn:false);
             }
             if (state is SignupFailed) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Signup failed. Please try again later'),
-                backgroundColor: Colors.red,
-              ));
+             QuickAlert.show(context: context, type: QuickAlertType.error,
+              text: 'Signup failed. Please try again later.',
+              autoCloseDuration: Duration(seconds: 3),
+              showConfirmBtn:false);
             }
           },
           builder: (context, state) {
@@ -138,6 +152,7 @@ class _SignupPageState extends State<SignupPage> {
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 17),
                                   child: IntlPhoneField(
+                                    controller: _userMobileController,
                                     keyboardType: TextInputType.phone,
                                     decoration: InputDecoration(
                                       labelText: 'Phone Number',
@@ -269,24 +284,40 @@ class _SignupPageState extends State<SignupPage> {
 
   validateUserDetails(String userName, String userEmail, String userMobile,
       String userPassword, String userRePassword, BuildContext context) {
+        
     if (userName.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Please enter a username')));
-    } else if (userMobile.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please enter a 10 digit mobile number')));
-    } else if (userEmail.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please enter an email address')));
-    } else if (userPassword.isEmpty) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Please enter a password')));
+       QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Please enter a username',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
+      // ScaffoldMessenger.of(context)
+      //     .showSnackBar(SnackBar(content: Text('Please enter a username')));
+    }  else if (userEmail.isEmpty) {
+   QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Please enter an email address',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
+    }else if (userMobile.isEmpty) {
+       QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Please enter a 10 digit mobile number',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
+    } 
+    else if (userPassword.isEmpty) {
+      QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Please enter a password',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
     } else if (userRePassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please re enter the password')));
+  QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Please re enter the password',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
     } else if ((userPassword) != (userRePassword)) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Both passwords are not same')));
+      QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Both passwords doesnot match each other',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
     } else {
       context.read<SignupBloc>().add(SignupUser(
           userName: userName,

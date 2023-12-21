@@ -20,6 +20,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mobx/mobx.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -196,20 +197,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  Future<bool> showExitPopUp() async {
-    return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Do you really want to exit from Pokedex app?'),
-        actions: [
-          TextButton(onPressed: () {}, child: Text('No')),
-          TextButton(
-              onPressed: () {
-                SystemNavigator.pop();
-              },
-              child: Text('Yes'))
-        ],
-      ),
-    );
+  Future<bool> showExitPopUp() async { 
+    return await QuickAlert.show(context: context,
+     type: QuickAlertType.confirm,
+     text: 'Do you really want to exit from the app?',
+     confirmBtnText: 'Yes',
+     onConfirmBtnTap: () {
+      SystemNavigator.pop();
+     },
+     cancelBtnText: 'No',
+    
+     onCancelBtnTap: () {
+       Navigator.pop(context);
+     },);
+  
   }
 }

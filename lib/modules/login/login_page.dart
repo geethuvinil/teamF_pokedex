@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               // );
             }
             if (state is LoginFailed) {
-            
+             
               QuickAlert.show(context: context, type: QuickAlertType.error,
               text: 'Login failed due to incorrect email or password',
               autoCloseDuration: Duration(seconds: 3),
