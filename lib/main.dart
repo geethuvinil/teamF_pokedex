@@ -1,4 +1,5 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:app/l10n/l10n.dart';
 import 'package:app/shared/getit/getit.dart';
 import 'package:app/shared_preferences_provider.dart';
 import 'package:app/theme/dark/dark_theme.dart';
@@ -6,7 +7,12 @@ import 'package:app/theme/light/light_theme.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:app/shared/routes/router.dart' as router;
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +49,14 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: router.Router.getRoutes(context),
         initialRoute: "/splash",
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate
+        ],
+        locale: Locale('en'),
+        supportedLocales:L10n.all
       ),
     );
   }

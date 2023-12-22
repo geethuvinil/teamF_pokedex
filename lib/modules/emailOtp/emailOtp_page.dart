@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:quickalert/quickalert.dart';
 
 class OtpPage extends StatefulWidget {
   final String? typedOtp;
@@ -42,35 +43,29 @@ class _OtpPageState extends State<OtpPage> {
               BlocListener<EmailotpBloc, EmailotpState>(
                 listener: (context, state) {
                   if (state is VerificationSuccess) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.green,
-                        content: Center(child: Text('Verification success')),
-                      ),
-                    );
+                    QuickAlert.show(context: context, type: QuickAlertType.success,
+                    text: 'OTP verification completed successfully',
+                    autoCloseDuration: Duration(seconds: 2),
+                    showConfirmBtn: false);
                   }
                   if (state is VerificationFailed) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Center(child: Text('Invalid Otp')),
-                      ),
-                    );
+                      QuickAlert.show(context: context, type: QuickAlertType.error,
+                    text: 'Invalid OTP',
+                    autoCloseDuration: Duration(seconds: 2),
+                    showConfirmBtn: false);
                   }
                 },
               ),
               BlocListener<ResendOtpBloc, ResendOtpState>(
                 listener: (context, state) {
                   if (state is ResendOtpSent) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.green,
-                  content: Center(
-                      child:
-                          Text('New OTP has been sent to your registered email.')),
-                ),
-              );
-               Navigator.push(
+                 QuickAlert.show(context: context, type: QuickAlertType.success,
+              text: 'New OTP has been sent to your registered email',
+             
+
+              confirmBtnText: 'Continue',
+              onConfirmBtnTap: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => OtpPage(
@@ -80,15 +75,17 @@ class _OtpPageState extends State<OtpPage> {
                     )
                   ),
                 );
+              },
+
+              );
+              
                   }
                   // moves to otp page
                   if (state is ResendOtpFailed) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Center(child: Text('Otp sending failed')),
-                      ),
-                    );
+                    QuickAlert.show(context: context, type: QuickAlertType.error,
+                    text: 'Sending OTP failed',
+                    autoCloseDuration: Duration(seconds: 2),
+                    showConfirmBtn: false);
                   }
                 },
               ),
@@ -227,7 +224,10 @@ focusBorderColor: Colors.black,
                           builder: (context, state) {
                             return TextButton(
                                 onPressed: () {
-                                 
+                                    QuickAlert.show(context: context, type: QuickAlertType.loading,
+      text:'Loading',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
                                   context.read<ResendOtpBloc>().add(ResendOtp(userEmail: widget.userEmailId ?? '' ));
                                 },
                                 child: Text('Resend OTP',
@@ -277,36 +277,36 @@ focusBorderColor: Colors.black,
   validateOtp(String otp, BuildContext context) {
     print('dsfzdddzx$otp');
     if (otp.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.black,
-          content: Center(child: Text('Please enter the otp')),
-        ),
-      );
+     QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Please enter the OTP',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
     } 
     else if (otp != widget.typedOtp) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.black,
-          content: Center(child: Text('Otp doesnot match')),
-        ),
-      );
+       QuickAlert.show(context: context, type: QuickAlertType.error,
+      text:'Invalid OTP',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
       
     } 
       
     else if (otp == widget.typedOtp) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.green,
-          content: Center(child: Text('Otp verification success')),
-        ),
-      );
-      Navigator.push(
+      QuickAlert.show(context: context, type: QuickAlertType.success,
+              text: 'OTP verification success',
+             
+
+              confirmBtnText: 'Continue',
+              onConfirmBtnTap: () {
+              Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => RsestPasswordPage(),
         ),
       );
+              },
+
+              );
+    
     }
   }
 }

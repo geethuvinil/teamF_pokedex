@@ -56,7 +56,7 @@ class AuthService {
   Future<dynamic> resetPassword(dynamic newPasswordCredentials) async {
     try {
       print('data isssssss $newPasswordCredentials');
-      dynamic response = await http.post(Uri.parse('$baseUrl/resetPassword/reset'),
+      dynamic response = await http.post(Uri.parse('$baseUrl/password/reset'),
           headers: {'Content-Type': 'application/json'},
           body: json.encode(newPasswordCredentials));
       dynamic responseObj = json.decode(response.body);

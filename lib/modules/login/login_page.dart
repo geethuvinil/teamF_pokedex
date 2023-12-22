@@ -5,7 +5,10 @@ import 'package:app/modules/login/bloc/bloc/login_bloc.dart';
 import 'package:app/modules/signup/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -93,7 +96,8 @@ class _LoginPageState extends State<LoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Welcome Back!',
+                          AppLocalizations.of(context)!.language,
+                          //'welcome',
                             style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,

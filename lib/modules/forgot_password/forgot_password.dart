@@ -3,6 +3,7 @@ import 'package:app/modules/emailOtp/emailOtp_page.dart';
 import 'package:app/modules/forgot_password/bloc/bloc/forgot_password_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quickalert/quickalert.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -23,33 +24,32 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         child: BlocConsumer<ForgotPasswordBloc, ForgotPasswordState>(
           listener: (context, state) {
             if (state is OtpSent) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.green,
-                  content: Center(
-                      child:
-                          Text('OTP has been sent to your registered email.')),
-                ),
-              );
-               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => OtpPage(
+                           QuickAlert.show(context: context, type: QuickAlertType.success,
+              text: 'OTP has been sent to your registered email address',
+             
+
+              confirmBtnText: 'Continue',
+              onConfirmBtnTap: () {
+                Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OtpPage(
                       typedOtp: state.emailOtp,
                       userEmailId: _emailController.text,
                       isResendOtp: false,
-                    )
-                  ),
-                );
+                  ))
+              );
+              },
+
+              );
+              
             }
 
             if (state is EmailNotFound) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.red,
-                  content: Center(child: Text('Email not found')),
-                ),
-              );
+              QuickAlert.show(context: context, type: QuickAlertType.error,
+              text: 'Email not found',
+              showConfirmBtn: false,
+              autoCloseDuration: Duration(seconds: 2));
             }
           },
           builder: (context, state) {
@@ -114,14 +114,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           return ElevatedButton(
                             onPressed: () {
                           if(_emailController.text.isEmpty){
-                                       ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                
-                  content:
-                      Center(child: Text('Enter your registered email.')),
-                ),
-            );
+                                QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Please enter your registered email',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
                                      }
+                                      QuickAlert.show(context: context, type: QuickAlertType.loading,
+      text:'Loading',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
                                    context.read<ForgotPasswordBloc>().add(SubmitEnteredEmail(
                                     regEmail: _emailController.text,
                                     

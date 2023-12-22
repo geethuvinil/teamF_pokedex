@@ -3,6 +3,7 @@ import 'package:app/modules/login/login_page.dart';
 import 'package:app/modules/reset_password/bloc/reset_password_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quickalert/quickalert.dart';
 
 class RsestPasswordPage extends StatefulWidget {
   RsestPasswordPage({super.key});
@@ -19,7 +20,7 @@ class _RsestPasswordPageState extends State<RsestPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('reset pageeeeeeeee');
+   
     return Scaffold(
       backgroundColor: Colors.white,
       body: BlocProvider(
@@ -27,24 +28,26 @@ class _RsestPasswordPageState extends State<RsestPasswordPage> {
         child: BlocConsumer<ResetPasswordBloc, ResetPasswordState>(
           listener: (context, state) {
             if (state is ResetPasswordSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: Colors.green,
-                  content:
-                      Center(child: Text('Password changed successfully.')),
-                ),
-              );
-              Navigator.push(
+             QuickAlert.show(context: context, type: QuickAlertType.success,
+              text: 'Password changed successfully',
+             
+
+              confirmBtnText: 'Continue',
+              onConfirmBtnTap: () {
+                 Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => LoginPage()),
               );
+              },
+
+              );
+             
             }
             if (state is ResetPasswordFailed) {
-              SnackBar(
-                backgroundColor: Colors.red,
-                content: Center(
-                    child: Text('Password reset failed. Please try later.')),
-              );
+             QuickAlert.show(context: context, type: QuickAlertType.error,
+             text: 'Password reset failed. Please try again later',
+             autoCloseDuration: Duration(seconds: 2),
+             showConfirmBtn: false);
             }
           },
           builder: (context, state) {
@@ -162,32 +165,28 @@ class _RsestPasswordPageState extends State<RsestPasswordPage> {
       String confirmationPassword, BuildContext context) {
     print('haii ${emailId}');
   if(emailId.isEmpty){
-       SnackBar(
-                backgroundColor: Colors.black,
-                content: Center(
-                    child: Text('Enter the email address')),
-              );
-    }
+    QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Enter the email address',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
+  }
    else if(latestPassword.isEmpty){
-       SnackBar(
-                backgroundColor: Colors.black,
-                content: Center(
-                    child: Text('Enter the new password')),
-              );
+       QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Enter the new password',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
     }
     else if(confirmationPassword.isEmpty){
-       SnackBar(
-                backgroundColor: Colors.black,
-                content: Center(
-                    child: Text('Renter the new password')),
-              );
+      QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Re enter the new password',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
     }
       else if(latestPassword != confirmationPassword){
-       SnackBar(
-                backgroundColor: Colors.black,
-                content: Center(
-                    child: Text('Passwords doesnot match each other')),
-              );
+       QuickAlert.show(context: context, type: QuickAlertType.warning,
+      text:'Passwords doesnot match each other',
+      autoCloseDuration: Duration(seconds: 3),
+      showConfirmBtn: false );
     }
     else{
      context.read<ResetPasswordBloc>().add( SubmitNewPasswordEvent(email: emailId, newPassword: latestPassword));
