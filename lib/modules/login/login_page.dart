@@ -3,6 +3,7 @@ import 'package:app/modules/forgot_password/forgot_password.dart';
 import 'package:app/modules/home/home_page.dart';
 import 'package:app/modules/login/bloc/bloc/login_bloc.dart';
 import 'package:app/modules/signup/signup_page.dart';
+import 'package:app/shared/utils/demo_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -21,8 +22,11 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   LoginBloc _loginBloc = LoginBloc();
+
+
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       body: BlocProvider(
         create: (context) => _loginBloc,
@@ -96,8 +100,8 @@ class _LoginPageState extends State<LoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                          AppLocalizations.of(context)!.language,
-                          //'welcome',
+                    
+                          'welcome',
                             style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,

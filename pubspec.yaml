@@ -36,7 +36,6 @@ dependencies:
   intl_phone_field: ^3.2.0
   quickalert: ^1.0.2
   get: ^4.6.6
-  flutter_localization: ^0.2.0
   intl: ^0.18.1
 
 dev_dependencies:
@@ -67,4 +66,5 @@ flutter:
     - assets/images/pokemons_generations/generation_7/
     - assets/images/pokemons_generations/generation_8/
     - assets/lotties/
+    - lib/lang/
     - assets/images/pokemons_types/20/water.png

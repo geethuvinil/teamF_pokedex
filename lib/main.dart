@@ -1,6 +1,7 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:app/l10n/l10n.dart';
 import 'package:app/shared/getit/getit.dart';
+import 'package:app/shared/utils/demo_localization.dart';
 import 'package:app/shared_preferences_provider.dart';
 import 'package:app/theme/dark/dark_theme.dart';
 import 'package:app/theme/light/light_theme.dart';
@@ -25,10 +26,29 @@ void main() {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+  static void setLocale(BuildContext context, Locale locale){
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.setLocale(locale); 
+  }
   final SharedPreferences prefs;
 
   const MyApp(this.prefs, {super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+Locale? _locale;
+
+void setLocale(Locale locale){
+  setState(() {
+    _locale = locale;
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -37,26 +57,43 @@ class MyApp extends StatelessWidget {
     final botToastBuilder = BotToastInit();
 
     return ThemeProvider(
-      initTheme: prefs.getBool("darkTheme") ?? false ? darkTheme : lightTheme,
+      initTheme: widget.prefs.getBool("darkTheme") ?? false ? darkTheme : lightTheme,
       child: MaterialApp(
         title: 'Pokedex',
         builder: (context, child) {
           child = botToastBuilder(context, child);
           return child;
         },
+        locale:_locale ,
         theme: lightTheme,
         navigatorObservers: [BotToastNavigatorObserver()],
         debugShowCheckedModeBanner: false,
         routes: router.Router.getRoutes(context),
         initialRoute: "/splash",
         localizationsDelegates: [
-          AppLocalizations.delegate,
+          //AppLocalizations.delegate,
+          DemoLocalization.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
           GlobalMaterialLocalizations.delegate
         ],
-        locale: Locale('en'),
-        supportedLocales:L10n.all
+
+        localeResolutionCallback: (deviceLocale, supportedLocales) {
+          for(var locale in supportedLocales){
+            if(locale.languageCode == deviceLocale?.languageCode &&
+             locale.countryCode ==deviceLocale?.countryCode){
+              return deviceLocale;
+            }
+          }
+
+          return supportedLocales.first;
+        },
+        //locale: Locale('en'),
+        supportedLocales:[
+          Locale('en','US'),
+             Locale('hi','IN'),
+                Locale('ar','UM'),
+        ]
       ),
     );
   }
