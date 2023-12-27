@@ -37,6 +37,9 @@ dependencies:
   quickalert: ^1.0.2
   get: ^4.6.6
   intl: ^0.18.1
+  flick_video_player: ^0.5.0
+  video_player: ^2.8.1
+  
 
 dev_dependencies:
   mockito:
@@ -66,5 +69,6 @@ flutter:
     - assets/images/pokemons_generations/generation_7/
     - assets/images/pokemons_generations/generation_8/
     - assets/lotties/
+    - assets/videos/
     - lib/lang/
     - assets/images/pokemons_types/20/water.png

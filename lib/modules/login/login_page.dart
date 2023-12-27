@@ -4,11 +4,13 @@ import 'package:app/modules/home/home_page.dart';
 import 'package:app/modules/login/bloc/bloc/login_bloc.dart';
 import 'package:app/modules/signup/signup_page.dart';
 import 'package:app/shared/utils/demo_localization.dart';
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:video_player/video_player.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -22,7 +24,13 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   LoginBloc _loginBloc = LoginBloc();
+ 
 
+final FlickManager videoFlickManager = FlickManager(
+  // videoPlayerController: VideoPlayerController.asset('assets/videos/valley.mp4'),
+  videoPlayerController: VideoPlayerController.networkUrl(Uri.parse('https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4')),
+autoPlay: true,
+ );
 
   @override
   Widget build(BuildContext context) {
@@ -261,6 +269,13 @@ class _LoginPageState extends State<LoginPage> {
                                     ],
                                   )),
                             ),
+                            SizedBox(height: 5,),
+Padding(
+  padding: const EdgeInsets.all(12.0),
+  child:   AspectRatio(aspectRatio: 16/9,
+  
+  child: FlickVideoPlayer(flickManager: videoFlickManager),),
+),
                             SizedBox(height: 10),
                             Image.asset(
                               "assets/images/pokefrds.png",

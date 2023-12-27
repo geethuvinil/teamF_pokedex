@@ -1,5 +1,4 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
-import 'package:app/l10n/l10n.dart';
 import 'package:app/shared/getit/getit.dart';
 import 'package:app/shared/utils/demo_localization.dart';
 import 'package:app/shared_preferences_provider.dart';
