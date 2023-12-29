@@ -68,7 +68,7 @@ flutter:
     - assets/images/pokemons_generations/generation_7/
     - assets/images/pokemons_generations/generation_7/
     - assets/images/pokemons_generations/generation_8/
-    - assets/lotties/
+    - assets/lottie/
     - assets/videos/
     - lib/lang/
     - assets/images/pokemons_types/20/water.png

@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
 
@@ -269,13 +268,13 @@ autoPlay: true,
                                     ],
                                   )),
                             ),
-                            SizedBox(height: 5,),
-Padding(
-  padding: const EdgeInsets.all(12.0),
-  child:   AspectRatio(aspectRatio: 16/9,
+//                             SizedBox(height: 5,),
+// Padding(
+//   padding: const EdgeInsets.all(12.0),
+//   child:   AspectRatio(aspectRatio: 16/9,
   
-  child: FlickVideoPlayer(flickManager: videoFlickManager),),
-),
+//   child: FlickVideoPlayer(flickManager: videoFlickManager),),
+// ),
                             SizedBox(height: 10),
                             Image.asset(
                               "assets/images/pokefrds.png",

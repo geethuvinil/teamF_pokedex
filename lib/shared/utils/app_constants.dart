@@ -1,10 +1,10 @@
 import 'dart:math';
 
 class AppConstants {
-  static String get pikachuLottie => "assets/lotties/pikachu.json";
-  static String get squirtleLottie => "assets/lotties/squirtle.json";
-  static String get diglettLottie => "assets/lotties/diglett.json";
-    static String get splashScreen => "assets/lotties/splashscreen_lottie.json";
+  static String get pikachuLottie => "assets/lottie/pikachu.json";
+  static String get squirtleLottie => "assets/lottie/squirtle.json";
+  static String get diglettLottie => "assets/lottie/diglett.json";
+    static String get splashScreen => "assets/lottie/splashscreen_lottie.json";
   static String get fabIcon => "assets/images/icons/fab.png";
   static String get pokedexIcon => "assets/images/icons/pokedex_icon.png";
 
