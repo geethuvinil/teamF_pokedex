@@ -187,7 +187,7 @@ class _RsestPasswordPageState extends State<RsestPasswordPage> {
       text:'Passwords doesnot match each other',
       autoCloseDuration: Duration(seconds: 3),
       showConfirmBtn: false );
-    }
+    } 
     else{
      context.read<ResetPasswordBloc>().add( SubmitNewPasswordEvent(email: emailId, newPassword: latestPassword));
     }

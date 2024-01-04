@@ -125,10 +125,25 @@ class AuthService {
        
        );
        dynamic responseObj = json.decode(response.body);
-       print('717174,$responseObj');
+
       return responseObj;
     } catch (e) {
      print('$e');  
     }
+  }
+
+  Future<dynamic> addToFavorites(dynamic data) async{
+try {
+  dynamic response  = await http.post
+    (Uri.parse('$baseUrl/favorite'),
+       headers: {'Content-Type': 'application/json'},
+        body: json.encode(data)
+  );
+  dynamic responseObj = json.decode(response.body);
+         print('0000000000042525,$responseObj');
+  return responseObj;
+} catch (e) {
+   print('$e');  
+}
   }
 }

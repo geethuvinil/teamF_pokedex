@@ -182,6 +182,8 @@ class _SignupPageState extends State<SignupPage> {
                                 Padding(
                                     padding: const EdgeInsets.only(bottom: 17),
                                     child: CommonTextFormFieldWidget(
+                                      obscureText: true,
+                                      maxLines: 1,
                                         controller: _userPasswordController,
                                         labelString: 'Password',
                                         prefixIconWidget: Icon(
@@ -191,6 +193,8 @@ class _SignupPageState extends State<SignupPage> {
                                 Padding(
                                     padding: const EdgeInsets.only(bottom: 17),
                                     child: CommonTextFormFieldWidget(
+                                      maxLines: 1,
+                                      obscureText: true,
                                         controller: _userRePasswordController,
                                         labelString: 'Confirm Password',
                                         prefixIconWidget: Icon(

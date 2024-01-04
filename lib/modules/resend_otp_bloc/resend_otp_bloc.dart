@@ -36,7 +36,7 @@ Enjoy using Pokedex.
         await AuthService().sendOtpToUser(
           event.userEmail, 
           'We have sent a new OTP', 
-          emailContent);
+          emailContent); 
         
           emit(
             ResendOtpSent(newOtp: otp.toString()));
