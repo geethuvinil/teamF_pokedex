@@ -19,11 +19,31 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       
         if(response['statusCode'] == 201){
           print('525555a25625adsd${response['statusCode']}');
-          emit(AddToFavorites(isFavorite: true));
+          emit(AddToFavoritesSuccess(isFavorite: true));
         }
         if(response['statusCode'] == 204){
             print('----------------------${response['statusCode']}');
-          emit(RemoveFromFavorites());
+          emit(AddToFavoritesFailed());
+        }
+      } catch (e) {
+        print('Error: $e');
+      }
+   }
+   if(event is RemoveFromFav){
+      Map<String,dynamic> details =  {
+'email':event.email,
+'pokeName':event.pokedexName
+      };
+         try {
+        dynamic response = await AuthService().removeFromFavorites(details);
+      
+        if(response['statusCode'] == 201){
+          print('525555a25625adsd${response['statusCode']}');
+          emit(RemoveFromFavoritesSuccess());
+        }
+        if(response['statusCode'] == 204){
+            print('----------------------${response['statusCode']}');
+          emit(RemoveFromFavoritesFailed());
         }
       } catch (e) {
         print('Error: $e');
@@ -31,4 +51,5 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
    }
     });
   }
+  
 }

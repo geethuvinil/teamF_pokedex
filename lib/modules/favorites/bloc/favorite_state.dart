@@ -4,9 +4,13 @@ part of 'favorite_bloc.dart';
 sealed class FavoriteState {}
 
 final class FavoriteInitial extends FavoriteState {}
-final class AddToFavorites extends FavoriteState{
+final class AddToFavoritesSuccess extends FavoriteState{
     final bool isFavorite;
-  AddToFavorites({required this.isFavorite});
+  AddToFavoritesSuccess({required this.isFavorite});
 
 }
-final class RemoveFromFavorites extends FavoriteState{}
+final class AddToFavoritesFailed extends FavoriteState{}
+final class RemoveFromFavoritesSuccess extends FavoriteState{
+  
+}
+final class RemoveFromFavoritesFailed extends FavoriteState{}

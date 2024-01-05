@@ -45,7 +45,7 @@ bool isAddedToFavorite = false;
         create: (context) => _favoriteBloc,
         child: BlocConsumer<FavoriteBloc, FavoriteState>(
           listener: (context, state) {
-            if (state is AddToFavorites) {
+            if (state is AddToFavoritesSuccess) {
            setState(() {
              isAddedToFavorite = state.isFavorite;
              print('value ====== ${state.isFavorite}');
@@ -57,12 +57,12 @@ bool isAddedToFavorite = false;
                   autoCloseDuration: Duration(seconds: 2),
                   showConfirmBtn: false);
             }
-            if (state is RemoveFromFavorites) {
+            if (state is AddToFavoritesFailed) {
             
               QuickAlert.show(
                   context: context,
                   type: QuickAlertType.error,
-                  text: 'Removed from favorites',
+                  text: 'Adding to favorites failed. Please try again later',
                   autoCloseDuration: Duration(seconds: 2),
                   showConfirmBtn: false);
             }
@@ -231,10 +231,12 @@ bool isAddedToFavorite = false;
                                               builder: (context, state) {
                                                 return IconButton(
                                                   onPressed: () {
-                                                 
+                                                 isAddedToFavorite?
+                                                   context.read<FavoriteBloc>().add(RemoveFromFav(email:widget.userEmailid ?? '',
+                                                    pokedexName:(pokedex[index]['name']).toString(),
+                                                     )) 
                                                     
-                                                    
-                                                    context.read<FavoriteBloc>().add(AddToFav(email:widget.userEmailid ?? '',
+                                                    :context.read<FavoriteBloc>().add(AddToFav(email:widget.userEmailid ?? '',
                                                     pokedexName:(pokedex[index]['name']).toString(),
                                                      ));
                                                      print('sdhagsdsajdhas${pokedex[index]['name'].toString()}');

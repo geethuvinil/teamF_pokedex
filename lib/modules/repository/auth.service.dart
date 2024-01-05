@@ -135,7 +135,21 @@ class AuthService {
   Future<dynamic> addToFavorites(dynamic data) async{
 try {
   dynamic response  = await http.post
-    (Uri.parse('$baseUrl/favorite'),
+    (Uri.parse('$baseUrl/favorite/add'),
+       headers: {'Content-Type': 'application/json'},
+        body: json.encode(data)
+  );
+  dynamic responseObj = json.decode(response.body);
+         print('0000000000042525,$responseObj');
+  return responseObj;
+} catch (e) {
+   print('$e');  
+}
+  }
+    Future<dynamic> removeFromFavorites(dynamic data) async{
+try {
+  dynamic response  = await http.post
+    (Uri.parse('$baseUrl/favorite/remove'),
        headers: {'Content-Type': 'application/json'},
         body: json.encode(data)
   );
