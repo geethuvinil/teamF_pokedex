@@ -10,7 +10,6 @@ final class AddToFavoritesSuccess extends FavoriteState{
 
 }
 final class AddToFavoritesFailed extends FavoriteState{}
-final class ExistInFavorites extends FavoriteState{}
 
 final class RemoveFromFavoritesSuccess extends FavoriteState{
   

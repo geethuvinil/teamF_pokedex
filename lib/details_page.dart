@@ -24,6 +24,13 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   FavoriteBloc _favoriteBloc = FavoriteBloc();
+  bool isFavorite = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('pokemon details === ${widget.pokemonDetail}');
+  }
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -42,14 +49,7 @@ class _DetailPageState extends State<DetailPage> {
                   autoCloseDuration: Duration(seconds: 2),
                   showConfirmBtn: false);
             }
-            if (state is ExistInFavorites) {
-              QuickAlert.show(
-                  context: context,
-                  type: QuickAlertType.warning,
-                  text: 'Already added to favorites',
-                  autoCloseDuration: Duration(seconds: 2),
-                  showConfirmBtn: false);
-            }
+
             if (state is AddToFavoritesFailed) {
               QuickAlert.show(
                   context: context,
@@ -99,13 +99,28 @@ class _DetailPageState extends State<DetailPage> {
                       builder: (context, state) {
                         return IconButton(
                           onPressed: () {
-                            // need to show remove
-                            context.read<FavoriteBloc>().add(AddToFav(email:widget.emailId ?? '',
-                                                    pokedexName:(widget.pokemonDetail['name']).toString(),
-                                                     ));
+                            setState(() {
+                              isFavorite = !isFavorite;
+                              print(
+                                  'set state value of isFavorite ==$isFavorite');
+                            });
+                            if (!isFavorite) {
+                              print('remove from fav');
+                              context.read<FavoriteBloc>().add(RemoveFromFav(
+                                  email: widget.emailId ?? '',
+                                  pokedexName: (widget.pokemonDetail['name'])
+                                      .toString()));
+                            } else {
+                              print('add to fav');
+                              context.read<FavoriteBloc>().add(AddToFav(
+                                    email: widget.emailId ?? '',
+                                    pokedexName: (widget.pokemonDetail['name'])
+                                        .toString(),
+                                  ));
+                            }
                           },
                           icon: Icon(Icons.favorite),
-                          color: Colors.white,
+                          color: isFavorite ? Colors.yellow : Colors.white,
                           iconSize: 25,
                         );
                       },

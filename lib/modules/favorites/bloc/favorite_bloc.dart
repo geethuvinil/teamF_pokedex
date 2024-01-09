@@ -21,10 +21,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
           print('525555a25625adsd${response['statusCode']}');
           emit(AddToFavoritesSuccess(isFavorite: true));
         }
-        if(response['statusCode'] == 409){
-          print('525555a25625adsd${response['statusCode']}');
-          emit(ExistInFavorites());
-        }
+       
         if(response['statusCode'] == 500){
             print('----------------------${response['statusCode']}');
           emit(AddToFavoritesFailed());
