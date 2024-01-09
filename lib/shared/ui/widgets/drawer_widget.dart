@@ -1,3 +1,4 @@
+import 'package:app/myfav.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quickalert/quickalert.dart';
@@ -85,11 +86,21 @@ class _MyDrawerState extends State<MyDrawer> {
             },
           ),
           Divider(),
-          ListTile(
+          // ListTile(
+          //   leading: Icon(Icons.lock),
+          //   title: Text('Privacy Policy'),
+          //   onTap: () {
+          //    Navigator.pop(context);
+          //   },
+          // ),
+             ListTile(
             leading: Icon(Icons.lock),
-            title: Text('Privacy Policy'),
+            title: Text('Fav'),
             onTap: () {
              Navigator.pop(context);
+             Navigator.of(context).push(MaterialPageRoute(builder: (context) => MyFavorites(
+              userEmailid: widget.emailid,
+             ),));
             },
           ),
           Divider(),

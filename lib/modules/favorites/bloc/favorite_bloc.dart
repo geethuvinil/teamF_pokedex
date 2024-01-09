@@ -21,7 +21,11 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
           print('525555a25625adsd${response['statusCode']}');
           emit(AddToFavoritesSuccess(isFavorite: true));
         }
-        if(response['statusCode'] == 204){
+        if(response['statusCode'] == 409){
+          print('525555a25625adsd${response['statusCode']}');
+          emit(ExistInFavorites());
+        }
+        if(response['statusCode'] == 500){
             print('----------------------${response['statusCode']}');
           emit(AddToFavoritesFailed());
         }
@@ -49,6 +53,32 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
         print('Error: $e');
       }
    }
+
+if(event is FetchFav){
+      Map<String,dynamic> details =  {
+'email':event.email,
+
+      };
+         try {
+        dynamic response = await AuthService().fetchFavorites(event.email);
+      
+        if(response['statusCode'] == 201){
+          print('525555a25625adsd${response['statusCode']}');
+          emit(FetchFavoritesSuccess(favoritesList: response['favoritesList']));
+        }
+         if(response['statusCode'] == 409){
+          print('525555a25625adsd${response['statusCode']}');
+          emit(FavoritesListEmpty());
+        }
+        if(response['statusCode'] == 500){
+            print('----------------------${response['statusCode']}');
+          emit(FecthFavoritesFailed());
+        }
+      } catch (e) {
+        print('Error: $e');
+      }
+   }
+
     });
   }
   

@@ -140,7 +140,6 @@ try {
         body: json.encode(data)
   );
   dynamic responseObj = json.decode(response.body);
-         print('0000000000042525,$responseObj');
   return responseObj;
 } catch (e) {
    print('$e');  
@@ -148,13 +147,27 @@ try {
   }
     Future<dynamic> removeFromFavorites(dynamic data) async{
 try {
-  dynamic response  = await http.post
+  dynamic response  = await http.delete
     (Uri.parse('$baseUrl/favorite/remove'),
        headers: {'Content-Type': 'application/json'},
         body: json.encode(data)
   );
   dynamic responseObj = json.decode(response.body);
          print('0000000000042525,$responseObj');
+  return responseObj;
+} catch (e) {
+   print('$e');  
+}
+  }
+  Future<dynamic> fetchFavorites(String emailAddress) async{
+try {
+  dynamic response  = await http.get
+    (Uri.parse('$baseUrl/favorite/fetch/?email=$emailAddress'),
+       headers: {'Content-Type': 'application/json'},
+       
+  );
+  dynamic responseObj = json.decode(response.body);
+         print('fetchinggggg,$responseObj');
   return responseObj;
 } catch (e) {
    print('$e');  

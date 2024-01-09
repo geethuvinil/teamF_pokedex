@@ -20,4 +20,12 @@ class RemoveFromFav extends FavoriteEvent{
 required this.email,
 required this.pokedexName
   });
+  
+}
+class FetchFav extends FavoriteEvent{
+  final String email;
+
+  FetchFav({
+required this.email,
+  });
 }
