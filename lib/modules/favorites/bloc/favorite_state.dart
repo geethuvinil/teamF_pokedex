@@ -5,8 +5,7 @@ sealed class FavoriteState {}
 
 final class FavoriteInitial extends FavoriteState {}
 final class AddToFavoritesSuccess extends FavoriteState{
-    final bool isFavorite;
-  AddToFavoritesSuccess({required this.isFavorite});
+  
 
 }
 final class AddToFavoritesFailed extends FavoriteState{}
@@ -23,4 +22,10 @@ final class FetchFavoritesSuccess extends FavoriteState{
 }
 final class FavoritesListEmpty extends FavoriteState{}
 final class FecthFavoritesFailed extends FavoriteState{}
+
+final class IsFavoriteCharacter extends FavoriteState{
+  
+}
+
+final class NotFavoriteCharacter extends FavoriteState{}
 

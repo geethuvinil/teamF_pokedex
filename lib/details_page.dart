@@ -10,11 +10,13 @@ class DetailPage extends StatefulWidget {
   final Color color;
   final int heroTag;
   final String? emailId;
+  final bool? isFav;
 
   const DetailPage(
       {super.key,
       this.pokemonDetail,
       this.emailId,
+      this.isFav,
       required this.color,
       required this.heroTag});
 
@@ -24,12 +26,13 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   FavoriteBloc _favoriteBloc = FavoriteBloc();
-  bool isFavorite = false;
+  bool isFavorite =false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('pokemon details === ${widget.pokemonDetail}');
+    isFavorite = widget.isFav ?? false;
+    print('fav details === ${widget.isFav}');
   }
   @override
   Widget build(BuildContext context) {
@@ -120,7 +123,7 @@ class _DetailPageState extends State<DetailPage> {
                             }
                           },
                           icon: Icon(Icons.favorite),
-                          color: isFavorite ? Colors.yellow : Colors.white,
+                          color:isFavorite?Colors.yellow:Colors.white,
                           iconSize: 25,
                         );
                       },

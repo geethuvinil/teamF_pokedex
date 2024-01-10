@@ -29,3 +29,12 @@ class FetchFav extends FavoriteEvent{
 required this.email,
   });
 }
+class IsFavoriteCharacterOrNOt extends FavoriteEvent{
+  final String email;
+  final String characterId;
+
+  IsFavoriteCharacterOrNOt({
+required this.email,
+required this.characterId
+  });
+}

@@ -19,7 +19,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       
         if(response['statusCode'] == 201){
           print('525555a25625adsd${response['statusCode']}');
-          emit(AddToFavoritesSuccess(isFavorite: true));
+          emit(AddToFavoritesSuccess());
         }
        
         if(response['statusCode'] == 500){
@@ -75,6 +75,33 @@ if(event is FetchFav){
         print('Error: $e');
       }
    }
+
+if(event is IsFavoriteCharacterOrNOt){
+  print('bloc enteredd');
+      Map<String,dynamic> details =  {
+'email':event.email,
+'characterId':event.characterId
+
+      };
+      print('fav bloc ===== $details');
+         try {
+        dynamic response = await AuthService().isFavOrNot(details);
+      print('fav bloc reposnee == $response');
+        if(response['statusCode'] == 201){
+          print('525555a25625adsd${response['statusCode']}');
+          emit(IsFavoriteCharacter());
+        }
+       
+        if(response['statusCode'] == 500){
+            print('----------------------${response['statusCode']}');
+          emit(NotFavoriteCharacter());
+        }
+      } catch (e) {
+        print('Error: $e');
+      }
+   }
+
+
 
     });
   }

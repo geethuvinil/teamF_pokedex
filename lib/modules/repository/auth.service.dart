@@ -8,8 +8,7 @@ import '../../../apis.dart';
 class AuthService {
   Future<dynamic> registerUser(dynamic userData) async {
     try {
-      dynamic response = await http.post(
-          Uri.parse('$baseUrl/signup'),
+      dynamic response = await http.post(Uri.parse('$baseUrl/signup'),
           headers: {'Content-Type': 'application/json'},
           // since the type of data we are passing is json, we will give the content type as json
           body: json.encode(userData));
@@ -28,13 +27,11 @@ class AuthService {
     }
   }
 
-   Future<dynamic> verifyOtp(dynamic credentials) async {
-    dynamic response = await http.post(
-      Uri.parse('$baseUrl/verify-email'),
-      headers: {'Content-Type': 'application/json'},
-        body: json.encode(credentials)
-    );
-     dynamic responseObj = json.decode(response.body);
+  Future<dynamic> verifyOtp(dynamic credentials) async {
+    dynamic response = await http.post(Uri.parse('$baseUrl/verify-email'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(credentials));
+    dynamic responseObj = json.decode(response.body);
     return responseObj;
   }
 
@@ -79,15 +76,15 @@ class AuthService {
 
       return responseObj;
     } catch (e) {
-       print('$e');
+      print('$e');
     }
   }
-    sendOtpToUser(String email, String emailSubject, String emailBody) async {
-   
+
+  sendOtpToUser(String email, String emailSubject, String emailBody) async {
     String emailId = 'geethuajay@gmail.com';
     String password = 'wjhptgnuhqbfqsyi';
     final smtpServer = gmail(emailId, password);
-     // sending otp in email
+    // sending otp in email
     final message = Message()
       ..from = Address(emailId)
       ..recipients.add(email) // Recipient's email address
@@ -103,74 +100,89 @@ class AuthService {
     }
   }
 
-   Future<dynamic> resendOtp(dynamic credentials) async {
-   try {
-      dynamic response = await http.post(
-      Uri.parse('$baseUrl/resendOtp/resend-otp'),
-      headers: {'Content-Type': 'application/json'},
-        body: json.encode(credentials)
-    );
-     dynamic responseObj = json.decode(response.body);
-    return responseObj;
-   } catch (e) {
-      print(e);
-      print('ERRROORRR');
-   }
-    
-  }
-  Future<dynamic> fetchUserDetails(String userEmailId) async{
+  Future<dynamic> resendOtp(dynamic credentials) async {
     try {
-      dynamic response = await http.get(Uri.parse('$baseUrl/user/profile?email=$userEmailId'),
-       headers: {'Content-Type': 'application/json'},
-       
-       );
-       dynamic responseObj = json.decode(response.body);
-
+      dynamic response = await http.post(
+          Uri.parse('$baseUrl/resendOtp/resend-otp'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode(credentials));
+      dynamic responseObj = json.decode(response.body);
       return responseObj;
     } catch (e) {
-     print('$e');  
+      print(e);
+      print('ERRROORRR');
     }
   }
 
-  Future<dynamic> addToFavorites(dynamic data) async{
-try {
-  dynamic response  = await http.post
-    (Uri.parse('$baseUrl/favorite/add'),
-       headers: {'Content-Type': 'application/json'},
-        body: json.encode(data)
-  );
-  dynamic responseObj = json.decode(response.body);
-  return responseObj;
-} catch (e) {
-   print('$e');  
-}
+  Future<dynamic> fetchUserDetails(String userEmailId) async {
+    try {
+      dynamic response = await http.get(
+        Uri.parse('$baseUrl/user/profile?email=$userEmailId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+      dynamic responseObj = json.decode(response.body);
+
+      return responseObj;
+    } catch (e) {
+      print('$e');
+    }
   }
-    Future<dynamic> removeFromFavorites(dynamic data) async{
-try {
-  dynamic response  = await http.delete
-    (Uri.parse('$baseUrl/favorite/remove'),
-       headers: {'Content-Type': 'application/json'},
-        body: json.encode(data)
-  );
-  dynamic responseObj = json.decode(response.body);
-         print('0000000000042525,$responseObj');
-  return responseObj;
-} catch (e) {
-   print('$e');  
-}
+
+  Future<dynamic> addToFavorites(dynamic data) async {
+    try {
+      dynamic response = await http.post(Uri.parse('$baseUrl/favorite/add'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode(data));
+      dynamic responseObj = json.decode(response.body);
+      return responseObj;
+    } catch (e) {
+      print('$e');
+    }
   }
-  Future<dynamic> fetchFavorites(String emailAddress) async{
-try {
-  dynamic response  = await http.get
-    (Uri.parse('$baseUrl/favorite/fetch/?email=$emailAddress'),
-       headers: {'Content-Type': 'application/json'},
-       
-  );
-  dynamic responseObj = json.decode(response.body);
-         print('fetchinggggg,$responseObj');
-  return responseObj;
-} catch (e) {
-   print('$e');  
-}
+
+  Future<dynamic> removeFromFavorites(dynamic data) async {
+    try {
+      dynamic response = await http.delete(
+          Uri.parse('$baseUrl/favorite/remove'),
+          headers: {'Content-Type': 'application/json'},
+          body: json.encode(data));
+      dynamic responseObj = json.decode(response.body);
+      print('0000000000042525,$responseObj');
+      return responseObj;
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  Future<dynamic> fetchFavorites(String emailAddress) async {
+    try {
+      dynamic response = await http.get(
+        Uri.parse('$baseUrl/favorite/fetch/?email=$emailAddress'),
+        headers: {'Content-Type': 'application/json'},
+      );
+      dynamic responseObj = json.decode(response.body);
+      print('fetchinggggg,$responseObj');
+      return responseObj;
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  Future<dynamic> isFavOrNot(dynamic userData) async {
+    try {
+      print('gsgsdbsh$userData');
+      dynamic response = await http.post(
+        Uri.parse('$baseUrl/favorite/isFavorite'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(userData)
+      );
+      dynamic responseObj = json.decode(response.body);
+      print('1010101010,$responseObj');
+      print('hi im in auth service');
+
+      return responseObj;
+    } catch (e) {
+      print('error$e');
+    }
   }
 }
