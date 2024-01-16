@@ -385,10 +385,13 @@ class _DetailPageState extends State<DetailPage> {
                 Positioned(
                     top: (height * 0.18),
                     right: (width / 2) - 100,
-                    child: CachedNetworkImage(
-                      imageUrl: widget.pokemonDetail['img'],
-                      height: 200,
-                      fit: BoxFit.fitHeight,
+                    child: Hero(
+                      tag: widget.heroTag,
+                      child: CachedNetworkImage(
+                        imageUrl: widget.pokemonDetail['img'],
+                        height: 200,
+                        fit: BoxFit.fitHeight,
+                      ),
                     ))
               ],
             );
