@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:app/details_page.dart';
+import 'package:app/myfav.dart';
 import 'package:app/shared/ui/widgets/drawer_widget.dart';
+import 'package:app/type_page.dart';
+import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,17 +22,47 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  Animation<double>? _animation;
+  AnimationController? _animationController;
   final String pokeApi =
       "https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json";
   List<dynamic> pokedex = [];
   var scaffoldkey = GlobalKey<ScaffoldState>();
   FavoriteBloc _favoriteBloc = FavoriteBloc();
   bool isMyFavorite = false;
+  TextEditingController _searchValueController = TextEditingController();
+  List<dynamic> displayList = [];
   @override
   void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 260),
+    );
+    final curvedAnimation =
+        CurvedAnimation(curve: Curves.easeInOut, parent: _animationController!);
+    _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
     super.initState();
     fetchPokemonData();
+    print('list====${displayList.length}');
+  }
+
+  updateSearchResult({String? searchValue}) {
+    // List<dynamic> displayList = List.from(pokedex);
+
+    setState(() {
+      if (searchValue!.isEmpty) {
+        displayList = List.from(pokedex);
+      } else {
+        displayList = pokedex
+            .where((pokemon) => pokemon['name']
+                .toString()
+                .toLowerCase()
+                .contains(searchValue.toLowerCase()))
+            .toList();
+      }
+    });
   }
 
   @override
@@ -42,264 +75,414 @@ class _HomePageState extends State<HomePage> {
       drawer: MyDrawer(
         emailid: widget.userEmailid,
       ),
-      
       body: BlocProvider(
         create: (context) => _favoriteBloc,
         child: BlocConsumer<FavoriteBloc, FavoriteState>(
-          listener: (context, state) {
-            if (state is IsFavoriteCharacter) {
-              print('fav');
-              isMyFavorite = true;
-            }
-            if (state is NotFavoriteCharacter) {
-              print('not fav');
-              isMyFavorite = false;
-            }
-          },
-          builder: (context, state) {
-            return WillPopScope(
-              onWillPop: () => showExitPopUp(),
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: -25,
-                    right: -50,
-                    child: Image.asset(
-                      'assets/images/pball.png',
-                      color: Colors.grey,
-                      height: 230,
-                      width: 230,
-                    ),
+            listener: (context, state) {
+          if (state is IsFavoriteCharacter) {
+            print('fav');
+            isMyFavorite = true;
+          }
+          if (state is NotFavoriteCharacter) {
+            print('not fav');
+            isMyFavorite = false;
+          }
+        }, builder: (context, state) {
+          return WillPopScope(
+            onWillPop: () => showExitPopUp(),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: -25,
+                  right: -50,
+                  child: Image.asset(
+                    'assets/images/pball.png',
+                    color: Colors.grey,
+                    height: 230,
+                    width: 230,
                   ),
-                  Positioned(
-                    top: 77,
-                    right: 53,
-                    child: GestureDetector(
-                      onTap: () {
-                        scaffoldkey.currentState!.openDrawer();
-                      },
-                      child: Icon(Icons.menu),
-                    ),
+                ),
+                Positioned(
+                  top: 77,
+                  right: 53,
+                  child: GestureDetector(
+                    onTap: () {
+                      scaffoldkey.currentState!.openDrawer();
+                    },
+                    child: Icon(Icons.menu),
                   ),
-                  Positioned(
-                    top: 100,
-                    left: 20,
-                    child: Text(
-                      'Pokedex',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                    ),
+                ),
+                Positioned(
+                  top: 100,
+                  left: 20,
+                  child: Text(
+                    'Pokedex',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                   ),
-                  Positioned(
-                    top: 23,
-                    left: 70,
-                    child: Lottie.asset(
-                      'assets/lottie/movingpika.json',
-                      height: 185,
-                      width: 185,
-                    ),
+                ),
+                Positioned(
+                  top: 23,
+                  left: 70,
+                  child: Lottie.asset(
+                    'assets/lottie/movingpika.json',
+                    height: 185,
+                    width: 185,
                   ),
-                  Positioned(
-                    top: 150,
-                    bottom: 0,
-                    width: width,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 1,
-                            ),
-                            itemCount: pokedex.length,
-                            itemBuilder: (context, index) {
-                              var type = pokedex[index]['type'][0];
-                              return BlocBuilder<FavoriteBloc, FavoriteState>(
-                                builder: (context, state) {
-                                  return InkWell(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 4, horizontal: 4),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)),
-                                          color: type == 'Grass'
-                                              ? Colors.greenAccent
-                                              : type == 'Fire'
-                                                  ? Colors.redAccent
-                                                  : type == 'Water'
-                                                      ? Colors.blueAccent
-                                                      : type == 'Electric'
-                                                          ? Colors.yellowAccent
-                                                          : type == 'Rock'
-                                                              ? Colors.grey
-                                                              : type == 'Ground'
-                                                                  ? Colors.brown
-                                                                  : type ==
-                                                                          'Psychic'
-                                                                      ? Colors
-                                                                          .indigo
-                                                                      : type ==
-                                                                              'Fighting'
-                                                                          ? Colors
-                                                                              .orange
-                                                                          : type == 'Bug'
-                                                                              ? Colors.lightGreen
-                                                                              : type == 'Ghost'
-                                                                                  ? Colors.deepPurpleAccent
-                                                                                  : type == 'Normal'
-                                                                                      ? Colors.black26
-                                                                                      : type == 'Poison'
-                                                                                          ? Colors.deepPurple
-                                                                                          : Colors.pinkAccent,
-                                          border:
-                                              Border.all(color: Colors.black),
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            Positioned(
-                                              bottom: -10,
-                                              right: -8,
-                                              child: Image.asset(
-                                                'assets/images/pball.png',
+                ),
+                Positioned(
+                  top: 150,
+                  bottom: 0,
+                  width: width,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 1,
+                          ),
+                          itemCount: pokedex.length,
+                          itemBuilder: (context, index) {
+                            var type = pokedex[index]['type'][0];
+                            return BlocBuilder<FavoriteBloc, FavoriteState>(
+                              builder: (context, state) {
+                                return InkWell(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4, horizontal: 4),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                        color: type == 'Grass'
+                                            ? Colors.greenAccent
+                                            : type == 'Fire'
+                                                ? Colors.redAccent
+                                                : type == 'Water'
+                                                    ? Colors.blueAccent
+                                                    : type == 'Electric'
+                                                        ? Colors.yellowAccent
+                                                        : type == 'Rock'
+                                                            ? Colors.grey
+                                                            : type == 'Ground'
+                                                                ? Colors.brown
+                                                                : type ==
+                                                                        'Psychic'
+                                                                    ? Colors
+                                                                        .indigo
+                                                                    : type ==
+                                                                            'Fighting'
+                                                                        ? Colors
+                                                                            .orange
+                                                                        : type ==
+                                                                                'Bug'
+                                                                            ? Colors.lightGreen
+                                                                            : type == 'Ghost'
+                                                                                ? Colors.deepPurpleAccent
+                                                                                : type == 'Normal'
+                                                                                    ? Colors.black26
+                                                                                    : type == 'Poison'
+                                                                                        ? Colors.deepPurple
+                                                                                        : Colors.pinkAccent,
+                                        border: Border.all(color: Colors.black),
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            bottom: -10,
+                                            right: -8,
+                                            child: Image.asset(
+                                              'assets/images/pball.png',
+                                              height: 100,
+                                              fit: BoxFit.fitHeight,
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 16,
+                                            left: 10,
+                                            child: Text(
+                                              pokedex[index]['name'],
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 45,
+                                            left: 20,
+                                            child: Container(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: 8,
+                                                  right: 8,
+                                                  top: 4,
+                                                  bottom: 4,
+                                                ),
+                                                child: Text(
+                                                  type.toString(),
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                color: Colors.white24,
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            right: 5,
+                                            bottom: 5,
+                                            child: Hero(
+                                              tag: index,
+                                              child: CachedNetworkImage(
+                                                imageUrl: pokedex[index]['img'],
                                                 height: 100,
                                                 fit: BoxFit.fitHeight,
                                               ),
                                             ),
-                                            Positioned(
-                                              top: 16,
-                                              left: 10,
-                                              child: Text(
-                                                pokedex[index]['name'],
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
-                                                  fontSize: 18,
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              top: 45,
-                                              left: 20,
-                                              child: Container(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    left: 8,
-                                                    right: 8,
-                                                    top: 4,
-                                                    bottom: 4,
-                                                  ),
-                                                  child: Text(
-                                                    type.toString(),
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  color: Colors.white24,
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              right: 5,
-                                              bottom: 5,
-                                              child: Hero(
-                                                tag: index,
-                                                child: CachedNetworkImage(
-                                                  imageUrl: pokedex[index]['img'],
-                                                  height: 100,
-                                                  fit: BoxFit.fitHeight,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    onTap: () {
-                                      print('email==${widget.userEmailid} and id = ${pokedex[index]['name']}');
-                                  context.read<FavoriteBloc>().add(IsFavoriteCharacterOrNOt(
-                                        email: widget.userEmailid??'',
-                                         characterId: pokedex[index]['name']));
+                                  ),
+                                  onTap: () {
+                                    print(
+                                        'email==${widget.userEmailid} and id = ${pokedex[index]['name']}');
+                                    context.read<FavoriteBloc>().add(
+                                        IsFavoriteCharacterOrNOt(
+                                            email: widget.userEmailid ?? '',
+                                            characterId: pokedex[index]
+                                                ['name']));
+                                    print('indexxxxxxxx${pokedex[index]}');
 
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => DetailPage(
-                                                emailId: widget.userEmailid,
-                                                pokemonDetail: pokedex[index],
-                                                isFav: isMyFavorite,
-                                                color: type == 'Grass'
-                                                    ? Colors.greenAccent
-                                                    : type == 'Fire'
-                                                        ? Colors.redAccent
-                                                        : type == 'Water'
-                                                            ? Colors.blueAccent
-                                                            : type == 'Electric'
-                                                                ? Colors
-                                                                    .yellowAccent
-                                                                : type == 'Rock'
-                                                                    ? Colors
-                                                                        .grey
-                                                                    : type ==
-                                                                            'Ground'
-                                                                        ? Colors
-                                                                            .brown
-                                                                        : type ==
-                                                                                'Psychic'
-                                                                            ? Colors.indigo
-                                                                            : type == 'Fighting'
-                                                                                ? Colors.orange
-                                                                                : type == 'Bug'
-                                                                                    ? Colors.lightGreen
-                                                                                    : type == 'Ghost'
-                                                                                        ? Colors.deepPurpleAccent
-                                                                                        : type == 'Normal'
-                                                                                            ? Colors.black26
-                                                                                            : type == 'Poison'
-                                                                                                ? Colors.deepPurple
-                                                                                                : Colors.pinkAccent,
-                                                heroTag: index),
-                                          ));
-                                    },
-                                  );
-                                },
-                              );
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailPage(
+                                              emailId: widget.userEmailid,
+                                              pokemonDetail: pokedex[index],
+                                              isFav: isMyFavorite,
+                                              color: type == 'Grass'
+                                                  ? Colors.greenAccent
+                                                  : type == 'Fire'
+                                                      ? Colors.redAccent
+                                                      : type == 'Water'
+                                                          ? Colors.blueAccent
+                                                          : type == 'Electric'
+                                                              ? Colors
+                                                                  .yellowAccent
+                                                              : type == 'Rock'
+                                                                  ? Colors.grey
+                                                                  : type ==
+                                                                          'Ground'
+                                                                      ? Colors
+                                                                          .brown
+                                                                      : type ==
+                                                                              'Psychic'
+                                                                          ? Colors
+                                                                              .indigo
+                                                                          : type == 'Fighting'
+                                                                              ? Colors.orange
+                                                                              : type == 'Bug'
+                                                                                  ? Colors.lightGreen
+                                                                                  : type == 'Ghost'
+                                                                                      ? Colors.deepPurpleAccent
+                                                                                      : type == 'Normal'
+                                                                                          ? Colors.black26
+                                                                                          : type == 'Poison'
+                                                                                              ? Colors.deepPurple
+                                                                                              : Colors.pinkAccent,
+                                              heroTag: index),
+                                        ));
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  bottom: height * 0.1,
+                  width: width,
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: FloatingActionBubble(
+                        items: <Bubble>[
+                          Bubble(
+                            icon: Icons.catching_pokemon,
+                            iconColor: Colors.purpleAccent,
+                            title: 'All Types',
+                            titleStyle: TextStyle(fontSize: 15),
+                            bubbleColor: Colors.white,
+                            onPress: () {
+                              _animationController!.reverse();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TypePage(),
+                                  ));
                             },
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    bottom: height * 0.1,
-                    width: width,
-                    child: Align(
-                      alignment: Alignment.bottomRight,
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: FloatingActionButton(
-                          onPressed: () {
-                            showSearch(context: context, 
-                            delegate: CustomSearchDelegate());
-                            //  Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage(),));
-                          },
-                          child: Icon(Icons.tune),
-                        ),
+                          Bubble(
+                            icon: Icons.favorite,
+                            iconColor: Colors.purpleAccent,
+                            title: 'Favorite Pokemons',
+                            titleStyle: TextStyle(fontSize: 15),
+                            bubbleColor: Colors.white,
+                            onPress: () {
+                              _animationController!.reverse();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MyFavorites(
+                                      userEmailid: widget.userEmailid,
+                                    ),
+                                  ));
+                            },
+                          ),
+                          Bubble(
+                            icon: Icons.search,
+                            iconColor: Colors.purpleAccent,
+                            title: 'Search',
+                            titleStyle: TextStyle(fontSize: 15),
+                            bubbleColor: Colors.white,
+                            onPress: () {
+                              if (_animationController != null) {
+                                _animationController!.reverse();
+                              }
+
+                              searchBarWidget();
+                            },
+                          ),
+                        ],
+                        animation: _animation!,
+                        onPress: () => _animationController!.isCompleted
+                            ? _animationController!.reverse()
+                            : _animationController!.forward(),
+                        backGroundColor: Colors.white,
+                        iconColor: Colors.purple,
+                        iconData: Icons.home,
                       ),
                     ),
                   ),
+                ),
+              ],
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  searchBarWidget() {
+    print('dispkay list${displayList.length}');
+    _searchValueController.clear();
+    return showModalBottomSheet(
+      isScrollControlled: true,
+      elevation: 3,
+      shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) => SafeArea(
+              child: Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Padding(
+              padding: EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: _searchValueController,
+                    decoration: InputDecoration(
+                        hintText: 'Search here',
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.blue,
+                        ),
+                        suffixIcon: InkWell(
+                            onTap: () => Navigator.pop(context),
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.red,
+                            ))),
+                    onChanged: (value) =>
+                        updateSearchResult(searchValue: value),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      itemCount: displayList.length,
+                      itemBuilder: (context, index) {
+                        var type = displayList[index]['type'][0];
+                       return ListTile(
+                            onTap: () {
+                              print('testt${pokedex[index]}');
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailPage(
+                                      color: type == 'Grass'
+                                          ? Colors.greenAccent
+                                          : type == 'Fire'
+                                              ? Colors.redAccent
+                                              : type == 'Water'
+                                                  ? Colors.blueAccent
+                                                  : type == 'Electric'
+                                                      ? Colors.yellowAccent
+                                                      : type == 'Rock'
+                                                          ? Colors.grey
+                                                          : type == 'Ground'
+                                                              ? Colors.brown
+                                                              : type ==
+                                                                      'Psychic'
+                                                                  ? Colors
+                                                                      .indigo
+                                                                  : type ==
+                                                                          'Fighting'
+                                                                      ? Colors
+                                                                          .orange
+                                                                      : type ==
+                                                                              'Bug'
+                                                                          ? Colors
+                                                                              .lightGreen
+                                                                          : type == 'Ghost'
+                                                                              ? Colors.deepPurpleAccent
+                                                                              : type == 'Normal'
+                                                                                  ? Colors.black26
+                                                                                  : type == 'Poison'
+                                                                                      ? Colors.deepPurple
+                                                                                      : Colors.pinkAccent,
+                                      heroTag: index,
+                                      emailId: widget.userEmailid,
+                                      isFav: isMyFavorite,
+                                      pokemonDetail: displayList[index],
+                                    ),
+                                  ));
+                            },
+                            title: Text('${displayList[index]['name']}'));
+                      })
                 ],
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          )),
+        );
+      },
     );
   }
 
@@ -337,83 +520,4 @@ class _HomePageState extends State<HomePage> {
       print("Error fetching Pokemon data: $error");
     }
   }
-}
-class CustomSearchDelegate extends SearchDelegate {
-// Demo list to show querying
-List<String> searchTerms = [
-	"Bulbasaur",
-  "Wartortle",
-  "Caterpie",
-  "Pidgey",
-  "Arbok",
-  "Ekans",
-  "Gloom"
-	
-];
-	
-// first overwrite to 
-// clear the search text
-@override
-List<Widget>? buildActions(BuildContext context) {
-	return [
-	IconButton(
-		onPressed: () {
-		query = '';
-		},
-		icon: Icon(Icons.clear),
-	),
-	];
-}
-
-// second overwrite to pop out of search menu
-@override
-Widget? buildLeading(BuildContext context) {
-	return IconButton(
-	onPressed: () {
-		close(context, null);
-	},
-	icon: Icon(Icons.arrow_back),
-	);
-}
-
-// third overwrite to show query result
-@override
-Widget buildResults(BuildContext context) {
-	List<String> matchQuery = [];
-	for (var searchValue in searchTerms) {
-	if (searchValue.toLowerCase().contains(query.toLowerCase())) {
-		matchQuery.add(searchValue);
-	}
-	}
-	return ListView.builder(
-	itemCount: matchQuery.length,
-	itemBuilder: (context, index) {
-		var result = matchQuery[index];
-		return Container(
-      color: Colors.red,
-    );
-	},
-	);
-}
-
-// last overwrite to show the 
-// querying process at the runtime
-@override
-Widget buildSuggestions(BuildContext context) {
-	List<String> matchQuery = [];
-	for (var fruit in searchTerms) {
-	if (fruit.toLowerCase().contains(query.toLowerCase())) {
-		matchQuery.add(fruit);
-	}
-	}
-	return ListView.builder(
-	itemCount: matchQuery.length,
-	itemBuilder: (context, index) {
-		var result = matchQuery[index];
-		return ListTile(
-		title: Text(result),
-		);
-	},
-	);
-}
 }

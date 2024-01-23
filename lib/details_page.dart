@@ -7,8 +7,8 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 
 class DetailPage extends StatefulWidget {
   final pokemonDetail;
-  final Color color;
-  final int heroTag;
+  final Color? color;
+  final int? heroTag;
   final String? emailId;
   final bool? isFav;
 
@@ -17,8 +17,8 @@ class DetailPage extends StatefulWidget {
       this.pokemonDetail,
       this.emailId,
       this.isFav,
-      required this.color,
-      required this.heroTag});
+       this.color,
+       this.heroTag});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -386,7 +386,7 @@ class _DetailPageState extends State<DetailPage> {
                     top: (height * 0.18),
                     right: (width / 2) - 100,
                     child: Hero(
-                      tag: widget.heroTag,
+                      tag: widget.heroTag??0,
                       child: CachedNetworkImage(
                         imageUrl: widget.pokemonDetail['img'],
                         height: 200,
